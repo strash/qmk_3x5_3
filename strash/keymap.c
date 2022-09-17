@@ -3,6 +3,15 @@
 #include <stdio.h>
 #include <stdint.h>
 
+// screenshot to buffer
+#define SCR_TO_B SCMD(LCTL(KC_4))
+// screenshot to file
+#define SCR_TO_F SCMD(KC_4)
+// screen recording to file
+#define VIDEO SCMD(KC_5)
+// change language
+#define LANG HYPR(KC_SPC)
+
 enum layout {
 	DVO = 0,
 	QWE,
@@ -22,9 +31,6 @@ enum key {
 	NEXT_APP,          // go to the next app
 	PREW_SPC,          // go to the previous space
 	NEXT_SPC,          // go to the next space
-	SCR_TO_B,          // capture selected area to a buffer
-	SCR_TO_F,          // capture selected area to a file
-	VIDEO,             // start recording selected area to a file
 	T_BASE_H_NAV,      // change base layer and lang on tap and open nav layer on hold
 	T_MEDIA_H_SYM      // open media layer on tap and open sym layer on hold
 };
@@ -34,9 +40,6 @@ int opposite_base = QWE;
 
 uint16_t timer_base_nav;
 uint16_t timer_media_sym;
-
-// change language
-#define LANG HYPR(KC_SPC)
 
 enum tap_dance {
 	QWE_P_QUOT,
@@ -172,7 +175,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case HIS_BACK:
 			if (record->event.pressed) {
-				register_code(KC_LCMD);
+				register_mods(MOD_MASK_GUI);
 				register_code(KC_LBRC);
 			} else {
 				clear_keyboard();
@@ -180,7 +183,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case HIS_FORW:
 			if (record->event.pressed) {
-				register_code(KC_LCMD);
+				register_mods(MOD_MASK_GUI);
 				register_code(KC_RBRC);
 			} else {
 				clear_keyboard();
@@ -188,8 +191,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case PREW_TAB:
 			if (record->event.pressed) {
-				register_code(KC_LCTL);
-				register_code(KC_LSFT);
+				register_mods(MOD_MASK_CS);
 				register_code(KC_TAB);
 			} else {
 				clear_keyboard();
@@ -197,7 +199,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case NEXT_TAB:
 			if (record->event.pressed) {
-				register_code(KC_LCTL);
+				register_mods(MOD_MASK_CTRL);
 				register_code(KC_TAB);
 			} else {
 				clear_keyboard();
@@ -205,8 +207,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case PREW_APP:
 			if (record->event.pressed) {
-				register_code(KC_LCMD);
-				register_code(KC_LSFT);
+				register_mods(MOD_MASK_SG);
 				register_code(KC_TAB);
 			} else {
 				clear_keyboard();
@@ -214,7 +215,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case NEXT_APP:
 			if (record->event.pressed) {
-				register_code(KC_LCMD);
+				register_mods(MOD_MASK_GUI);
 				register_code(KC_TAB);
 			} else {
 				clear_keyboard();
@@ -222,7 +223,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case PREW_SPC:
 			if (record->event.pressed) {
-				register_code(KC_LCTL);
+				register_mods(MOD_MASK_CTRL);
 				register_code(KC_LEFT);
 			} else {
 				clear_keyboard();
@@ -230,36 +231,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case NEXT_SPC:
 			if (record->event.pressed) {
-				register_code(KC_LCTL);
+				register_mods(MOD_MASK_CTRL);
 				register_code(KC_RGHT);
-			} else {
-				clear_keyboard();
-			}
-			return false;
-		case SCR_TO_B:
-			if (record->event.pressed) {
-				register_code(KC_LOPT);
-				register_code(KC_LSFT);
-				register_code(KC_LCMD);
-				register_code(KC_P4);
-			} else {
-				clear_keyboard();
-			}
-			return false;
-		case SCR_TO_F:
-			if (record->event.pressed) {
-				register_code(KC_LSFT);
-				register_code(KC_LCMD);
-				register_code(KC_P4);
-			} else {
-				clear_keyboard();
-			}
-			return false;
-		case VIDEO:
-			if (record->event.pressed) {
-				register_code(KC_LSFT);
-				register_code(KC_LCMD);
-				register_code(KC_P5);
 			} else {
 				clear_keyboard();
 			}
