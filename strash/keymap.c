@@ -112,11 +112,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NAV] = LAYOUT( \
         //|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
-		        HIS_BACK,     HIS_FORW,     PREV_TAB,     NEXT_TAB,LCMD(KC_BSPC),    RSG(KC_BSPC),RSFT(KC_LEFT),RSFT(KC_DOWN),  RSFT(KC_UP),  RSFT(KC_RGHT), \
+		        HIS_BACK,     HIS_FORW,     PREV_TAB,     NEXT_TAB,LCMD(KC_BSPC),    RSG(KC_LEFT),RSFT(KC_LEFT),RSFT(KC_DOWN),  RSFT(KC_UP),  RSFT(KC_RGHT), \
         //|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
 		  LCTL_T(KC_TAB),      KC_LOPT,      KC_LSFT,      KC_LCMD,LOPT(KC_BSPC),   RCMD(KC_LEFT),      KC_LEFT,      KC_DOWN,        KC_UP,        KC_RGHT, \
         //|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
-		        PREV_APP,     NEXT_APP,     PREW_SPC,     NEXT_SPC,WEB_INSPECTOR,   ROPT(KC_BSPC),ROPT(KC_LEFT),ROPT(KC_DOWN),  ROPT(KC_UP),  ROPT(KC_RGHT), \
+		        PREV_APP,     NEXT_APP,     PREW_SPC,     NEXT_SPC,WEB_INSPECTOR,    RSA(KC_LEFT),ROPT(KC_LEFT),ROPT(KC_DOWN),  ROPT(KC_UP),  ROPT(KC_RGHT), \
         //|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
 										TD(ESC_LANG),        KC_NO,       KC_ENT,          KC_SPC,        KC_NO,      KC_BSPC \
 									//|-------------+-------------+-------------|  |-------------+-------------+-------------|
