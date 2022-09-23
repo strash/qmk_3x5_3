@@ -40,8 +40,8 @@ enum key {
 int active_base   = DVO;
 int opposite_base = QWE;
 
-int is_select_prev_app_active = 0;
-int is_select_next_app_active = 0;
+bool is_select_prev_app_active = false;
+bool is_select_next_app_active = false;
 
 uint16_t timer_base_nav;
 uint16_t timer_media_sym;
@@ -88,11 +88,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [MEDIA] = LAYOUT( \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
-	           KC_NO,        VIDEO,     SCR_TO_F,     SCR_TO_B,        KC_NO,           KC_NO,        KC_NO,        KC_NO,        KC_NO,        KC_MPLY, \
+	           KC_NO,        KC_NO,        VIDEO,     SCR_TO_F,     SCR_TO_B,           KC_NO,        KC_NO,        KC_NO,        KC_NO,        KC_MPLY, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
-	           KC_NO,        KC_NO,      KC_BRMD,      KC_BRMU,        KC_NO,         KC_MUTE,      KC_MRWD,      KC_VOLD,      KC_VOLU,        KC_MFFD, \
+	           KC_NO,        KC_NO,      KC_BRMD,      KC_BRMU,   LCMD(KC_V),         KC_MUTE,      KC_MRWD,      KC_VOLD,      KC_VOLU,        KC_MFFD, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
-	         KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,        KC_NO,           KC_NO,      KC_LEFT,      KC_DOWN,        KC_UP,        KC_RGHT, \
+	         KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,   LCMD(KC_V),           KC_NO,      KC_LEFT,      KC_DOWN,        KC_UP,        KC_RGHT, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+---------------|
 								    TD(ESC_LANG),         BASE,       KC_ENT,          KC_SPC,       TO(FN),      KC_BSPC \
 								//|-------------+-------------+-------------|  |-------------+-------------+-------------|
@@ -150,12 +150,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 };
 
 void unselect_app_selection(void) {
-    if (is_select_prev_app_active == 1) {
-        is_select_prev_app_active = 0;
+    if (is_select_prev_app_active == true) {
+        is_select_prev_app_active = false;
         clear_mods();
     }
-    if (is_select_next_app_active == 1) {
-        is_select_next_app_active = 0;
+    if (is_select_next_app_active == true) {
+        is_select_next_app_active = false;
         clear_mods();
     }
 };
@@ -226,14 +226,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case PREV_APP:
             if (record->event.pressed) {
-                if (is_select_prev_app_active == 0) {
-                    if (is_select_next_app_active == 1) {
-                        is_select_next_app_active = 0;
+                if (is_select_prev_app_active == false) {
+                    if (is_select_next_app_active == true) {
+                        is_select_next_app_active = false;
                         clear_mods();
                     }
                     register_mods(MOD_MASK_SG);
                     tap_code(KC_TAB);
-                    is_select_prev_app_active = 1;
+                    is_select_prev_app_active = true;
                 } else {
                     tap_code(KC_TAB);
                 }
@@ -241,14 +241,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case NEXT_APP:
             if (record->event.pressed) {
-                if (is_select_next_app_active == 0) {
-                    if (is_select_prev_app_active == 1) {
-                        is_select_prev_app_active = 0;
+                if (is_select_next_app_active == false) {
+                    if (is_select_prev_app_active == true) {
+                        is_select_prev_app_active = false;
                         clear_mods();
                     }
                     register_mods(MOD_MASK_GUI);
                     tap_code(KC_TAB);
-                    is_select_next_app_active = 1;
+                    is_select_next_app_active = true;
                 } else {
                     tap_code(KC_TAB);
                 }
