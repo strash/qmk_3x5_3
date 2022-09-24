@@ -42,6 +42,7 @@ int opposite_base = QWE;
 
 bool is_select_prev_app_active = false;
 bool is_select_next_app_active = false;
+bool esc_and_enter_handle = true;
 
 uint16_t timer_base_nav;
 uint16_t timer_media_sym;
@@ -150,13 +151,16 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 };
 
 void unselect_app_selection(void) {
+	esc_and_enter_handle = true;
     if (is_select_prev_app_active == true) {
         is_select_prev_app_active = false;
-        clear_mods();
+		esc_and_enter_handle = false;
+		unregister_mods(MOD_MASK_SG);
     }
     if (is_select_next_app_active == true) {
         is_select_next_app_active = false;
-        clear_mods();
+		esc_and_enter_handle = false;
+		unregister_mods(MOD_MASK_GUI);
     }
 };
 
@@ -167,7 +171,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 timer_base_nav = timer_read();
                 if (IS_LAYER_OFF(NAV)) layer_on(NAV);
             } else {
-                if (IS_LAYER_ON(NAV)) layer_off(NAV);
+                if (IS_LAYER_ON(NAV)) {
+					// confirm selection of an app (ctrl+cmd) if any
+					unselect_app_selection();
+                	layer_off(NAV);
+				}
                 if (timer_elapsed(timer_base_nav) < TAPPING_TERM) {
                     default_layer_xor((DVO + 1) | (QWE + 1));
 					register_mods(MOD_MASK_CSAG);
@@ -181,7 +189,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 timer_media_sym = timer_read();
                 if (IS_LAYER_OFF(SYM)) layer_on(SYM);
             } else {
-                if (IS_LAYER_ON(SYM)) layer_off(SYM);
+                if (IS_LAYER_ON(SYM)) {
+                	layer_off(SYM);
+				}
                 if (timer_elapsed(timer_media_sym) < TAPPING_TERM) {
                     layer_on(MEDIA);
                 }
@@ -282,12 +292,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 unselect_app_selection();
             }
-            return true;
+            return esc_and_enter_handle;
         case KC_ESC:
             if (record->event.pressed) {
                 unselect_app_selection();
             }
-            return true;
+            return esc_and_enter_handle;
         default:
             return true;
     }
