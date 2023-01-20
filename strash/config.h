@@ -1,3 +1,5 @@
+#pragma once
+
 #define MASTER_LEFT
 
 #define USE_SERIAL_PD2
@@ -9,8 +11,3 @@
 #define TYPING_FORCE_HOLD
 #define PERMISSIVE_HOLD
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
-//#define NO_ACTION_MACRO
-//#define NO_ACTION_FUNCTION
-// Configure the OLED screen to reduce burn-in
-//#define OLED_TIMEOUT 10000
-//#define OLED_BRIGHTNESS 80
