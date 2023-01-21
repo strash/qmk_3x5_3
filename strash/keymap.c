@@ -24,6 +24,7 @@ enum layout {
 enum key {
     BASE = SAFE_RANGE, // change base layer and lang
     NAV_HOLD,          // go to NAV on hold
+    SYM_HOLD,          // go to SYM on hold
     HIS_BACK,          // go back in the history (browser)
     HIS_FORW,          // go forward in the history (browser)
     PREV_TAB,          // go to the previous tab
@@ -56,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
              XXXXXXX,      KC_SCLN,         KC_Q,         KC_J,         KC_K,         KC_X,            KC_B,         KC_M,         KC_W,         KC_V,         KC_Z,      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
-														KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,      MO(SYM),      KC_BSPC \
+														KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,      KC_BSPC \
 											  //|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
@@ -72,7 +73,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
 			 XXXXXXX,         KC_Z,         KC_X,         KC_C,         KC_V,         KC_B,            KC_N,         KC_M,      KC_COMM,       KC_DOT,      KC_SLSH,      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
-														KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,      MO(SYM),LSFT_T(KC_BSPC) \
+														KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,LSFT_T(KC_BSPC) \
 											  //|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
@@ -108,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
 			 XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,   LCMD(KC_C),         XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
-														KC_ESC,    TG(MEDIA),       KC_SPC,          KC_ENT,    TG(MEDIA),      KC_BSPC \
+														KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,      KC_BSPC \
 											  //|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 };
@@ -136,10 +137,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			return false;
 		case NAV_HOLD:
 			if (record->event.pressed) {
+				if (IS_LAYER_ON(MEDIA)) layer_off(MEDIA);
 				if (IS_LAYER_OFF(NAV)) layer_on(NAV);
 			} else {
 				unselect_app_selection();
 				if (IS_LAYER_ON(NAV)) layer_off(NAV);
+			}
+			return false;
+		case SYM_HOLD:
+			if (record->event.pressed) {
+				if (IS_LAYER_ON(MEDIA)) layer_off(MEDIA);
+				if (IS_LAYER_OFF(SYM)) layer_on(SYM);
+			} else {
+				unselect_app_selection();
+				if (IS_LAYER_ON(SYM)) layer_off(SYM);
 			}
 			return false;
 		case HIS_BACK:
