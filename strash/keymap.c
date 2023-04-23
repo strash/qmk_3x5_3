@@ -33,6 +33,7 @@ enum key {
     NEXT_APP,          // go to the next app
     PREW_SPC,          // go to the previous space
     NEXT_SPC,          // go to the next space
+    NEXT_WIN,          // navigate between windows from within one app
     WEB_INSPECTOR,     // open/close web inspector
 };
 
@@ -81,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
 			 XXXXXXX,     HIS_BACK,     HIS_FORW,     PREV_TAB,     NEXT_TAB,LCMD(KC_BSPC),    RSG(KC_LEFT),RSFT(KC_LEFT),RSFT(KC_DOWN),  RSFT(KC_UP),RSFT(KC_RGHT),      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
-			 XXXXXXX,LCTL_T(KC_TAB),     KC_LOPT,      KC_LSFT,      KC_LCMD,LOPT(KC_BSPC),   RCMD(KC_LEFT),      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,      XXXXXXX, \
+			 XXXXXXX,LCTL_T(KC_TAB),     KC_LOPT,   KC_LSFT,LCMD_T(NEXT_WIN),LOPT(KC_BSPC),   RCMD(KC_LEFT),      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
 			 XXXXXXX,     PREV_APP,     NEXT_APP,     PREW_SPC,     NEXT_SPC, LOPT(KC_DEL),    RSA(KC_LEFT),ROPT(KC_LEFT),ROPT(KC_DOWN),  ROPT(KC_UP),ROPT(KC_RGHT),      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
@@ -231,6 +232,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				clear_keyboard();
 			}
 			return false;
+		case NEXT_WIN:
+			if (record->event.pressed) {
+				register_mods(MOD_MASK_GUI);
+				register_code(KC_TILDE);
+			} else {
+				clear_keyboard();
+			}
+			return false
 		case WEB_INSPECTOR:
 			if (record->event.pressed) {
 				register_mods(MOD_MASK_AG);
