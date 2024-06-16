@@ -22,18 +22,18 @@ enum layout {
 };
 
 enum key {
-    BASE = SAFE_RANGE, // change base layer and lang
-    NAV_HOLD,          // go to NAV on hold
-    SYM_HOLD,          // go to SYM on hold
-    HIS_BACK,          // go back in the history (browser)
-    HIS_FORW,          // go forward in the history (browser)
-    PREV_TAB,          // go to the previous tab
-    NEXT_TAB,          // go to the next tab
-    PREV_APP,          // go to the previous app
-    NEXT_APP,          // go to the next app
-    PREW_SPC,          // go to the previous space
-    NEXT_SPC,          // go to the next space
-    WEB_INSPECTOR,     // open/close web inspector
+	BASE = SAFE_RANGE, // change base layer and lang
+	NAV_HOLD,          // go to NAV on hold
+	SYM_HOLD,          // go to SYM on hold
+	HIS_BACK,          // go back in the history (browser)
+	HIS_FORW,          // go forward in the history (browser)
+	PREV_TAB,          // go to the previous tab
+	NEXT_TAB,          // go to the next tab
+	PREV_APP,          // go to the previous app
+	NEXT_APP,          // go to the next app
+	PREW_SPC,          // go to the previous space
+	NEXT_SPC,          // go to the next space
+	WEB_INSPECTOR,     // open/close web inspector
 };
 
 bool is_select_prev_app_active = false;
@@ -47,27 +47,27 @@ tap_dance_action_t tap_dance_actions[] = {
 	[QWE_P_QUOT] = ACTION_TAP_DANCE_DOUBLE(KC_P, KC_QUOT),
 };
 
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = { \
 
-	[DVO] = LAYOUT( \
+    [DVO] = LAYOUT( \
+    //|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
+			 KC_QUOT,      KC_COMM,       KC_DOT,         KC_P,         KC_Y,            KC_F,         KC_G,         KC_C,         KC_R,         KC_L, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-             KC_QUOT,      KC_COMM,      KC_DOT,          KC_P,         KC_Y,            KC_F,         KC_G,         KC_C,         KC_R,         KC_L, \
+				KC_A, LOPT_T(KC_O), LSFT_T(KC_E), LCMD_T(KC_U),         KC_I,            KC_D, RCMD_T(KC_H), RSFT_T(KC_T), ROPT_T(KC_N),         KC_S, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-        LCTL_T(KC_A), LOPT_T(KC_O), LSFT_T(KC_E), LCMD_T(KC_U),         KC_I,            KC_D, RCMD_T(KC_H), RSFT_T(KC_T), ROPT_T(KC_N), RCTL_T(KC_S), \
+			 KC_SCLN,         KC_Q,         KC_J,         KC_K,         KC_X,            KC_B,         KC_M,         KC_W,         KC_V,         KC_Z, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-             KC_SCLN,         KC_Q,         KC_J,         KC_K,         KC_X,            KC_B,         KC_M,         KC_W,         KC_V,         KC_Z, \
-	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-										  KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,      KC_BSPC \
-							    //|-------------+-------------+-------------|  |-------------+-------------+-------------|
-	),
+										  KC_ESC,     NAV_HOLD,LCTL_T(KC_SPC), RCTL_T(KC_ENT),     SYM_HOLD,       KC_BSPC \
+								//|-------------+-------------+-------------|  |-------------+-------------+-------------|
+    ),
 
-	// йцуке нгшщз(э)
-	// фывап ролдж
-	// ячсми тьбю/
+    // йцуке нгшщз(э)
+    // фывап ролдж
+    // ячсми тьбю/
 
 	[QWE] = LAYOUT( \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-	            KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,            KC_Y,         KC_U,         KC_I,        KC_O,TD(QWE_P_QUOT), \
+	            KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,            KC_Y,         KC_U,         KC_I,         KC_O, TD(QWE_P_QUOT), \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 	            KC_A,         KC_S,         KC_D,         KC_F,         KC_G,            KC_H,         KC_J,         KC_K,         KC_L,      KC_SCLN, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
@@ -75,13 +75,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 										  KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,LSFT_T(KC_BSPC) \
 							    //|-------------+-------------+-------------|  |-------------+-------------+-------------|
-	),
+    ),
 
 	[NAV] = LAYOUT( \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 	        HIS_BACK,     HIS_FORW,     PREV_TAB,     NEXT_TAB,LCMD(KC_BSPC),    RSG(KC_LEFT),RSFT(KC_LEFT),RSFT(KC_DOWN),  RSFT(KC_UP),RSFT(KC_RGHT), \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-	   LCTL_T(KC_TAB),     KC_LOPT,      KC_LSFT,      KC_LCMD,LOPT(KC_BSPC),   RCMD(KC_LEFT),      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT, \
+	          KC_TAB,     KC_LOPT,   KC_LSFT,         KC_LCMD,LOPT(KC_BSPC),   RCMD(KC_LEFT),      KC_LEFT,      KC_DOWN,         KC_UP,      KC_RGHT, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 	        PREV_APP,     NEXT_APP,     PREW_SPC,     NEXT_SPC, LOPT(KC_DEL),    RSA(KC_LEFT),ROPT(KC_LEFT),ROPT(KC_DOWN),  ROPT(KC_UP),ROPT(KC_RGHT), \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
@@ -105,9 +105,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 	   WEB_INSPECTOR,      XXXXXXX,        VIDEO,     SCR_TO_F,     SCR_TO_B,         XXXXXXX,      XXXXXXX,      XXXXXXX,      XXXXXXX,      KC_MPLY, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-	         XXXXXXX,      XXXXXXX,      KC_BRMD,      KC_BRMU,   LCMD(KC_V),         KC_MUTE,      KC_MRWD,      KC_VOLD,      KC_VOLU,      KC_MFFD, \
+	         XXXXXXX,      XXXXXXX,      KC_BRMD,      KC_BRMU,   LCMD(KC_C),         KC_MUTE,      KC_MRWD,      KC_VOLD,      KC_VOLU,      KC_MFFD, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-	         KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,   LCMD(KC_C),         XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT, \
+	         KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,   LCMD(KC_V),         XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 										  KC_ESC,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,      KC_BSPC \
 							    //|-------------+-------------+-------------|  |-------------+-------------+-------------|
