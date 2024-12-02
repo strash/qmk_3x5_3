@@ -47,6 +47,7 @@ uint16_t sym_layer_timer = 0;
 enum tap_dance {
 	TILD_GRV,
 	PLUS_EQL,
+	SLSH_QUES,
 	QWE_P_QUOT,
 	QWE_M_LBRC,
 	QWE_COMM_RBRC,
@@ -56,6 +57,7 @@ enum tap_dance {
 tap_dance_action_t tap_dance_actions[] = {
 	[TILD_GRV]      = ACTION_TAP_DANCE_DOUBLE(KC_TILD, KC_GRV),
 	[PLUS_EQL]      = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_EQL),
+	[SLSH_QUES]     = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_QUES),
 	[QWE_P_QUOT]    = ACTION_TAP_DANCE_DOUBLE(KC_P,    KC_QUOT),
 	[QWE_M_LBRC]    = ACTION_TAP_DANCE_DOUBLE(KC_M,    KC_LBRC),
 	[QWE_COMM_RBRC] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_RBRC),
@@ -125,7 +127,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
 			 XXXXXXX,        KC_P1,        KC_P2,        KC_P3,        KC_P4,        KC_P5,           KC_P6,        KC_P7,        KC_P8,        KC_P9,        KC_P0,      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
-			 XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS, TD(PLUS_EQL), TD(TILD_GRV),         KC_SLSH,      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,      XXXXXXX, \
+			 XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS, TD(PLUS_EQL), TD(TILD_GRV),   TD(SLSH_QUES),      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,      XXXXXXX, \
 	//|-------------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------------|
 													   XXXXXXX,      KC_UNDS,    TO(MEDIA),         XXXXXXX,      XXXXXXX,      XXXXXXX \
 											  //|-------------+-------------+-------------|  |-------------+-------------+-------------|
