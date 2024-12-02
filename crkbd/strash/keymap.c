@@ -55,7 +55,7 @@ enum tap_dance {
 
 tap_dance_action_t tap_dance_actions[] = {
 	[TILD_GRV]      = ACTION_TAP_DANCE_DOUBLE(KC_TILD, KC_GRV),
-	[PLUS_EQL]       = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_EQL),
+	[PLUS_EQL]      = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_EQL),
 	[QWE_P_QUOT]    = ACTION_TAP_DANCE_DOUBLE(KC_P,    KC_QUOT),
 	[QWE_M_LBRC]    = ACTION_TAP_DANCE_DOUBLE(KC_M,    KC_LBRC),
 	[QWE_COMM_RBRC] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_RBRC),
@@ -64,14 +64,17 @@ tap_dance_action_t tap_dance_actions[] = {
 
 // combo
 
-enum combo_event {
+enum combos {
 	DVO_CAPS_WORD,
+	QWE_CAPS_WORD,
 };
 
 const uint16_t PROGMEM dvo_caps_word_combo[] = {LSFT_T(KC_E), RSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM qwe_caps_word_combo[] = {LSFT_T(KC_D), RSFT_T(KC_K), COMBO_END};
 
 combo_t key_combos[] = {
-	[DVO_CAPS_WORD] = COMBO_ACTION(dvo_caps_word_combo),
+	[DVO_CAPS_WORD] = COMBO(dvo_caps_word_combo, CW_TOGG),
+	[QWE_CAPS_WORD] = COMBO(qwe_caps_word_combo, CW_TOGG),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -142,28 +145,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void unselect_app_selection(void) {
+	// prev app
 	if (is_select_prev_app_active == true) {
 		is_select_prev_app_active = false;
 		unregister_mods(MOD_MASK_SG);
 	}
+	// next app
 	if (is_select_next_app_active == true) {
 		is_select_next_app_active = false;
 		unregister_mods(MOD_MASK_GUI);
 	}
 };
 
-void process_combo_event(uint16_t combo_index, bool is_pressed) {
-	switch (combo_index) {
-		case DVO_CAPS_WORD:
-			if (is_pressed && layer_state_is(DVO)) {
-				caps_word_on();
-			}
-			break;
-	}
-}
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+		case KC_ESC:
+			if (!record->event.pressed && is_caps_word_on()) {
+				caps_word_off();
+			}
+			return false;
 		case BASE:
 			if (record->event.pressed) {
 				default_layer_xor((DVO + 1) | (QWE + 1));
@@ -182,8 +182,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				if (IS_LAYER_ON(NAV)) layer_off(NAV);
 				if (IS_LAYER_OFF(NAV) && (timer_read() - nav_layer_timer) < TAPPING_TERM ) {
 					tap_code(KC_ESC);
+					if (is_caps_word_on()) caps_word_off();
 				}
-				nav_layer_timer = 0;
 			}
 			return false;
 		case SYM_HOLD:
@@ -196,8 +196,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				if (IS_LAYER_ON(SYM)) layer_off(SYM);
 				if (IS_LAYER_OFF(SYM) && (timer_read() - sym_layer_timer) < TAPPING_TERM) {
 					tap_code(KC_BSPC);
+					if (is_caps_word_on()) caps_word_off();
 				}
-				sym_layer_timer = 0;
 			}
 			return false;
 		case HIS_BACK:
