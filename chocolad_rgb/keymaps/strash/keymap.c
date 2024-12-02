@@ -42,6 +42,9 @@ bool is_select_next_app_active = false;
 uint16_t nav_layer_timer = 0;
 uint16_t sym_layer_timer = 0;
 
+bool did_closed_media = false;
+bool did_change_base_layer = false;
+
 // tap dance
 
 enum tap_dance {
@@ -172,34 +175,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				register_mods(MOD_MASK_CSAG);
 				register_code(KC_SPC);
 				clear_keyboard();
+				did_change_base_layer = true;
 			}
 			return false;
 		case NAV_HOLD:
 			if (record->event.pressed) {
 				nav_layer_timer = timer_read();
-				if (IS_LAYER_ON(MEDIA)) layer_off(MEDIA);
+				if (IS_LAYER_ON(MEDIA)) {
+					layer_off(MEDIA);
+					did_closed_media = true;
+				}
 				if (IS_LAYER_OFF(NAV)) layer_on(NAV);
 			} else {
 				unselect_app_selection();
 				if (IS_LAYER_ON(NAV)) layer_off(NAV);
-				if (IS_LAYER_OFF(NAV) && (timer_read() - nav_layer_timer) < TAPPING_TERM ) {
+				if (!did_closed_media && !did_change_base_layer
+						&& (timer_read() - nav_layer_timer) < TAPPING_TERM) {
 					tap_code(KC_ESC);
 					if (is_caps_word_on()) caps_word_off();
 				}
+				did_closed_media = false;
+				did_change_base_layer = false;
 			}
 			return false;
 		case SYM_HOLD:
 			if (record->event.pressed) {
 				sym_layer_timer = timer_read();
-				if (IS_LAYER_ON(MEDIA)) layer_off(MEDIA);
+				if (IS_LAYER_ON(MEDIA)) {
+					layer_off(MEDIA);
+					did_closed_media = true;
+				}
 				if (IS_LAYER_OFF(SYM)) layer_on(SYM);
 			} else {
 				unselect_app_selection();
 				if (IS_LAYER_ON(SYM)) layer_off(SYM);
-				if (IS_LAYER_OFF(SYM) && (timer_read() - sym_layer_timer) < TAPPING_TERM) {
+				if (!did_closed_media && (timer_read() - sym_layer_timer) < TAPPING_TERM) {
 					tap_code(KC_BSPC);
 					if (is_caps_word_on()) caps_word_off();
 				}
+				did_closed_media = false;
 			}
 			return false;
 		case HIS_BACK:
