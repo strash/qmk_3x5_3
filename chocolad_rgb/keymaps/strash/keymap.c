@@ -42,6 +42,7 @@ bool is_select_next_app_active = false;
 uint16_t nav_layer_timer = 0;
 uint16_t sym_layer_timer = 0;
 
+bool is_about_to_open_media = false;
 bool did_closed_media = false;
 bool did_change_base_layer = false;
 
@@ -198,6 +199,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				did_change_base_layer = false;
 			}
 			return false;
+		case TO(MEDIA):
+			if (record->event.pressed) {
+				is_about_to_open_media = true;
+			} else {
+				if (IS_LAYER_OFF(MEDIA)) layer_on(MEDIA);
+			}
+			return false;
 		case SYM_HOLD:
 			if (record->event.pressed) {
 				sym_layer_timer = timer_read();
@@ -209,11 +217,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			} else {
 				unselect_app_selection();
 				if (IS_LAYER_ON(SYM)) layer_off(SYM);
-				if (!did_closed_media && (timer_read() - sym_layer_timer) < TAPPING_TERM) {
+				if (!is_about_to_open_media &&
+						!did_closed_media &&
+						(timer_read() - sym_layer_timer) < TAPPING_TERM) {
 					tap_code(KC_BSPC);
 					if (is_caps_word_on()) caps_word_off();
 				}
 				did_closed_media = false;
+				is_about_to_open_media = false;
 			}
 			return false;
 		case HIS_BACK:
