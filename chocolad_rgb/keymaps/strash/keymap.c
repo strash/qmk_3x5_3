@@ -1,8 +1,4 @@
 #include QMK_KEYBOARD_H
-#include "quantum.h"
-#include <stdio.h>
-#include <stdint.h>
-#include "strash_keymap.h"
 
 // screenshot to buffer
 #define SCR_TO_B SCMD(LCTL(KC_4))
@@ -42,11 +38,38 @@ bool is_select_next_app_active = false;
 uint16_t nav_layer_timer = 0;
 uint16_t sym_layer_timer = 0;
 
-bool is_about_to_open_media = false;
-bool did_closed_media = false;
-bool did_change_base_layer = false;
+bool is_nav_interrupted = false;
+bool is_sym_interrupted = false;
+bool did_close_media = false;
+bool did_change_base = false;
 
 // tap dance
+
+void dance_plus_eq_dbl_eq(tap_dance_state_t *state, void *user_data) {
+	if (state->count == 1) {
+		SEND_STRING("+");
+	} else if (state->count == 2) {
+		SEND_STRING("=");
+	} else if (state->count == 3) {
+		SEND_STRING("==");
+		reset_tap_dance(state);
+	} else {
+		reset_tap_dance(state);
+	}
+}
+
+void dance_slsh_ques_dbl_slsh(tap_dance_state_t *state, void *user_data) {
+	if (state->count == 1) {
+		SEND_STRING("/");
+	} else if (state->count == 2) {
+		SEND_STRING("?");
+	} else if (state->count == 3) {
+		SEND_STRING("//");
+		reset_tap_dance(state);
+	} else {
+		reset_tap_dance(state);
+	}
+}
 
 enum tap_dance {
 	TILD_GRV,
@@ -60,8 +83,8 @@ enum tap_dance {
 
 tap_dance_action_t tap_dance_actions[] = {
 	[TILD_GRV]      = ACTION_TAP_DANCE_DOUBLE(KC_TILD, KC_GRV),
-	[PLUS_EQL]      = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_EQL),
-	[SLSH_QUES]     = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_QUES),
+	[PLUS_EQL]      = ACTION_TAP_DANCE_FN(dance_plus_eq_dbl_eq),
+	[SLSH_QUES]     = ACTION_TAP_DANCE_FN(dance_slsh_ques_dbl_slsh),
 	[QWE_P_QUOT]    = ACTION_TAP_DANCE_DOUBLE(KC_P,    KC_QUOT),
 	[QWE_M_LBRC]    = ACTION_TAP_DANCE_DOUBLE(KC_M,    KC_LBRC),
 	[QWE_COMM_RBRC] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_RBRC),
@@ -164,6 +187,10 @@ void unselect_app_selection(void) {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+	if (record->event.pressed) {
+		is_nav_interrupted = true;
+		is_sym_interrupted = true;
+	}
     switch (keycode) {
 		case KC_ESC:
 			if (!record->event.pressed && is_caps_word_on()) {
@@ -176,7 +203,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				register_mods(MOD_MASK_CSAG);
 				register_code(KC_SPC);
 				clear_keyboard();
-				did_change_base_layer = true;
+				did_change_base = true;
 			}
 			return false;
 		case NAV_HOLD:
@@ -184,26 +211,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				nav_layer_timer = timer_read();
 				if (IS_LAYER_ON(MEDIA)) {
 					layer_off(MEDIA);
-					did_closed_media = true;
+					did_close_media = true;
 				}
 				if (IS_LAYER_OFF(NAV)) layer_on(NAV);
+				is_nav_interrupted = false;
 			} else {
 				unselect_app_selection();
 				if (IS_LAYER_ON(NAV)) layer_off(NAV);
-				if (!did_closed_media && !did_change_base_layer
+				if (!is_nav_interrupted && !did_close_media && !did_change_base
 						&& (timer_read() - nav_layer_timer) < TAPPING_TERM) {
 					tap_code(KC_ESC);
 					if (is_caps_word_on()) caps_word_off();
 				}
-				did_closed_media = false;
-				did_change_base_layer = false;
-			}
-			return false;
-		case TO(MEDIA):
-			if (record->event.pressed) {
-				is_about_to_open_media = true;
-			} else {
-				if (IS_LAYER_OFF(MEDIA)) layer_on(MEDIA);
+				did_close_media = false;
+				did_change_base = false;
 			}
 			return false;
 		case SYM_HOLD:
@@ -211,20 +232,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				sym_layer_timer = timer_read();
 				if (IS_LAYER_ON(MEDIA)) {
 					layer_off(MEDIA);
-					did_closed_media = true;
+					did_close_media = true;
 				}
 				if (IS_LAYER_OFF(SYM)) layer_on(SYM);
+				is_sym_interrupted = false;
 			} else {
 				unselect_app_selection();
 				if (IS_LAYER_ON(SYM)) layer_off(SYM);
-				if (!is_about_to_open_media &&
-						!did_closed_media &&
+				if (!is_sym_interrupted &&
+						!did_close_media &&
 						(timer_read() - sym_layer_timer) < TAPPING_TERM) {
 					tap_code(KC_BSPC);
 					if (is_caps_word_on()) caps_word_off();
 				}
-				did_closed_media = false;
-				is_about_to_open_media = false;
+				did_close_media = false;
 			}
 			return false;
 		case HIS_BACK:
