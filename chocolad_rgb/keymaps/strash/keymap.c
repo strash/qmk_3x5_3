@@ -17,10 +17,13 @@ enum layout {
 	MEDIA
 };
 
+// nav hold
+#define NAV_HOLD LT(NAV, KC_ESC)
+// sym hold
+#define SYM_HOLD LT(SYM, KC_BSPC)
+
 enum key {
 	BASE = SAFE_RANGE, // change base layer and lang
-	NAV_HOLD,          // go to NAV on hold
-	SYM_HOLD,          // go to SYM on hold
 	HIS_BACK,          // go back in the history (browser)
 	HIS_FORW,          // go forward in the history (browser)
 	PREV_TAB,          // go to the previous tab
@@ -31,17 +34,6 @@ enum key {
 	NEXT_SPC,          // go to the next space
 	WEB_INSPECTOR,     // open/close web inspector
 };
-
-bool is_select_prev_app_active = false;
-bool is_select_next_app_active = false;
-
-uint16_t nav_layer_timer = 0;
-uint16_t sym_layer_timer = 0;
-
-bool is_nav_interrupted = false;
-bool is_sym_interrupted = false;
-bool did_close_media = false;
-bool did_change_base = false;
 
 // tap dance
 
@@ -168,18 +160,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = { \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 	         KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,   LCMD(KC_V),         XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-										 XXXXXXX,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,      XXXXXXX \
+										 XXXXXXX,    TG(MEDIA),       KC_SPC,          KC_ENT,    TG(MEDIA),      XXXXXXX \
 							    //|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 };
 
+bool is_select_prev_app_active = false;
+bool is_select_next_app_active = false;
+
 void unselect_app_selection(void) {
-	// prev app
+	// unselect PREV_APP
 	if (is_select_prev_app_active == true) {
 		is_select_prev_app_active = false;
 		unregister_mods(MOD_MASK_SG);
 	}
-	// next app
+	// unselect NEXT_APP
 	if (is_select_next_app_active == true) {
 		is_select_next_app_active = false;
 		unregister_mods(MOD_MASK_GUI);
@@ -187,10 +182,14 @@ void unselect_app_selection(void) {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+	static bool is_nav_interrupted = false;
+	static bool is_sym_interrupted = false;
+
 	if (record->event.pressed) {
 		is_nav_interrupted = true;
 		is_sym_interrupted = true;
 	}
+
     switch (keycode) {
 		case KC_ESC:
 			if (!record->event.pressed && is_caps_word_on()) {
@@ -203,51 +202,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				register_mods(MOD_MASK_CSAG);
 				register_code(KC_SPC);
 				clear_keyboard();
-				did_change_base = true;
 			}
 			return false;
 		case NAV_HOLD:
 			if (record->event.pressed) {
-				nav_layer_timer = timer_read();
-				if (IS_LAYER_ON(MEDIA)) {
-					layer_off(MEDIA);
-					did_close_media = true;
-				}
-				if (IS_LAYER_OFF(NAV)) layer_on(NAV);
 				is_nav_interrupted = false;
 			} else {
 				unselect_app_selection();
-				if (IS_LAYER_ON(NAV)) layer_off(NAV);
-				if (!is_nav_interrupted && !did_close_media && !did_change_base
-						&& (timer_read() - nav_layer_timer) < TAPPING_TERM) {
-					tap_code(KC_ESC);
-					if (is_caps_word_on()) caps_word_off();
+				if (is_nav_interrupted && IS_LAYER_ON(NAV)) {
+					layer_off(NAV);
+					return false;
 				}
-				did_close_media = false;
-				did_change_base = false;
 			}
-			return false;
+			return true;
 		case SYM_HOLD:
 			if (record->event.pressed) {
-				sym_layer_timer = timer_read();
-				if (IS_LAYER_ON(MEDIA)) {
-					layer_off(MEDIA);
-					did_close_media = true;
-				}
-				if (IS_LAYER_OFF(SYM)) layer_on(SYM);
 				is_sym_interrupted = false;
 			} else {
 				unselect_app_selection();
-				if (IS_LAYER_ON(SYM)) layer_off(SYM);
-				if (!is_sym_interrupted &&
-						!did_close_media &&
-						(timer_read() - sym_layer_timer) < TAPPING_TERM) {
-					tap_code(KC_BSPC);
-					if (is_caps_word_on()) caps_word_off();
+				if (is_sym_interrupted && IS_LAYER_OFF(SYM)) {
+					layer_on(SYM);
+					return false;
 				}
-				did_close_media = false;
 			}
-			return false;
+			return true;
 		case HIS_BACK:
 			if (record->event.pressed) {
 				register_mods(MOD_MASK_GUI);
