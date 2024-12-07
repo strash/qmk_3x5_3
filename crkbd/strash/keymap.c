@@ -33,6 +33,7 @@ enum key {
     PREW_SPC,          // go to the previous space
     NEXT_SPC,          // go to the next space
     WEB_INSPECTOR,     // open/close web inspector
+    C_MEDIA,           // close media
 };
 
 // tap dance
@@ -148,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 	   XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS, TD(PLUS_EQL), TD(TILD_GRV),   TD(SLSH_QUES),      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-												 XXXXXXX,      KC_UNDS,    TG(MEDIA),         XXXXXXX,      XXXXXXX,      XXXXXXX \
+												 XXXXXXX,      KC_UNDS,    TO(MEDIA),         XXXXXXX,      XXXXXXX,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
@@ -160,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 	   XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,   LCMD(KC_V),         XXXXXXX,      KC_LEFT,      KC_DOWN,        KC_UP,      KC_RGHT,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-											     XXXXXXX,    TG(MEDIA),       KC_SPC,          KC_ENT,    TG(MEDIA),      XXXXXXX \
+											     XXXXXXX,      C_MEDIA,       KC_SPC,          KC_ENT,      C_MEDIA,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 };
@@ -215,8 +216,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				is_sym_interrupted = false;
 			} else {
 				unselect_app_selection();
-				if (is_sym_interrupted && IS_LAYER_OFF(SYM)) {
-					layer_on(SYM);
+				if (is_sym_interrupted && IS_LAYER_ON(SYM)) {
+					layer_off(SYM);
 					return false;
 				}
 			}
@@ -307,8 +308,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				clear_keyboard();
 			}
 			return false;
-		default:
-			return true;
+		case C_MEDIA:
+			if (IS_LAYER_ON(MEDIA)) layer_off(MEDIA);
+			return false;
 	}
+	return true;
 };
 
