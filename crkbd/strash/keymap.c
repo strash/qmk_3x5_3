@@ -148,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 	   XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS, TD(PLUS_EQL), TD(TILD_GRV),   TD(SLSH_QUES),      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-												 XXXXXXX,      KC_UNDS,    TO(MEDIA),         XXXXXXX,      XXXXXXX,      XXXXXXX \
+												 XXXXXXX,      KC_UNDS,    TG(MEDIA),         XXXXXXX,      XXXXXXX,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
