@@ -38,48 +38,22 @@ enum key {
 
 // tap dance
 
-void dance_plus_eq_dbl_eq(tap_dance_state_t *state, void *user_data) {
-	if (state->count == 1) {
-		SEND_STRING("+");
-	} else if (state->count == 2) {
-		SEND_STRING("=");
-	} else if (state->count == 3) {
-		SEND_STRING("==");
-		reset_tap_dance(state);
-	} else {
-		reset_tap_dance(state);
-	}
-}
-
-void dance_slsh_ques_dbl_slsh(tap_dance_state_t *state, void *user_data) {
-	if (state->count == 1) {
-		SEND_STRING("/");
-	} else if (state->count == 2) {
-		SEND_STRING("?");
-	} else if (state->count == 3) {
-		SEND_STRING("//");
-		reset_tap_dance(state);
-	} else {
-		reset_tap_dance(state);
-	}
-}
-
 enum tap_dance {
 	TILD_GRV,
-	PLUS_EQL,
-	SLSH_QUES,
+	MINS_PLUS,
+	CIRC_BSLS,
 	QWE_P_QUOT,
-	QWE_N_LBRC,
+	QWE_M_LBRC,
 	QWE_COMM_RBRC,
 	QWE_SLSH_BSLS,
 };
 
 tap_dance_action_t tap_dance_actions[] = {
 	[TILD_GRV]      = ACTION_TAP_DANCE_DOUBLE(KC_TILD, KC_GRV),
-	[PLUS_EQL]      = ACTION_TAP_DANCE_FN(dance_plus_eq_dbl_eq),
-	[SLSH_QUES]     = ACTION_TAP_DANCE_FN(dance_slsh_ques_dbl_slsh),
+	[MINS_PLUS]     = ACTION_TAP_DANCE_DOUBLE(KC_MINS, KC_PLUS),
+	[CIRC_BSLS]     = ACTION_TAP_DANCE_DOUBLE(KC_CIRC, KC_BSLS),
 	[QWE_P_QUOT]    = ACTION_TAP_DANCE_DOUBLE(KC_P,    KC_QUOT),
-	[QWE_N_LBRC]    = ACTION_TAP_DANCE_DOUBLE(KC_N,    KC_LBRC),
+	[QWE_M_LBRC]    = ACTION_TAP_DANCE_DOUBLE(KC_M,    KC_LBRC),
 	[QWE_COMM_RBRC] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_RBRC),
 	[QWE_SLSH_BSLS] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, KC_BSLS),
 };
@@ -123,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 	   XXXXXXX,         KC_A,         KC_S, LSFT_T(KC_D),         KC_F,         KC_G,            KC_H,         KC_J, RSFT_T(KC_K),         KC_L,      KC_SCLN,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-	   XXXXXXX,         KC_Z,         KC_X,         KC_C,         KC_V,         KC_B,  TD(QWE_N_LBRC),        KC_N,TD(QWE_COMM_RBRC),KC_DOT,TD(QWE_SLSH_BSLS),XXXXXXX, \
+	   XXXXXXX,         KC_Z,         KC_X,         KC_C,         KC_V,         KC_B,            KC_N,TD(QWE_M_LBRC),TD(QWE_COMM_RBRC),KC_DOT,TD(QWE_SLSH_BSLS),XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 											     XXXXXXX,     NAV_HOLD,       KC_SPC,          KC_ENT,     SYM_HOLD,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
@@ -143,11 +117,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	[SYM] = LAYOUT( \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-	   XXXXXXX,      KC_EXLM,        KC_AT,      KC_HASH,       KC_DLR,      KC_PERC,         KC_CIRC,      KC_AMPR,      KC_PIPE,      KC_ASTR,      KC_BSLS,XXXXXXX, \
+	   XXXXXXX,      KC_EXLM,        KC_AT,      KC_HASH,       KC_DLR,      KC_PERC,   TD(CIRC_BSLS),      KC_AMPR,      KC_PIPE,      KC_ASTR,      KC_QUES,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 	   XXXXXXX,        KC_P1,        KC_P2,        KC_P3,        KC_P4,        KC_P5,           KC_P6,        KC_P7,        KC_P8,        KC_P9,        KC_P0,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-	   XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS, TD(PLUS_EQL), TD(TILD_GRV),   KC_LBRC,      TD(SLSH_QUES),      KC_RBRC,      KC_LPRN,      KC_RPRN,XXXXXXX, \
+	   XXXXXXX,      KC_LCBR,      KC_RCBR,TD(MINS_PLUS),       KC_EQL, TD(TILD_GRV),         KC_SLSH,      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 												 XXXXXXX,      KC_UNDS,    TO(MEDIA),         XXXXXXX,      XXXXXXX,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
