@@ -10,7 +10,7 @@
 #define LANG HYPR(KC_SPC)
 
 enum layout {
-	DVO = 0,
+	GFU = 0,
 	QWE,
 	NAV,
 	SYM,
@@ -75,15 +75,15 @@ combo_t key_combos[] = {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-	[DVO] = LAYOUT( \
+	[GFU] = LAYOUT( \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-       XXXXXXX,      KC_QUOT,      KC_COMM,      KC_DOT,          KC_P,         KC_Y,            KC_F,         KC_G,         KC_C,         KC_R,         KC_L,XXXXXXX, \
+       XXXXXXX,         KC_G,         KC_F,         KC_U,         KC_P,      KC_COMM,            KC_B,         KC_C,         KC_M,         KC_H,         KC_L,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-       XXXXXXX,         KC_A, LOPT_T(KC_O), LSFT_T(KC_E), LCMD_T(KC_U),         KC_I,            KC_D, RCMD_T(KC_H), RSFT_T(KC_T), ROPT_T(KC_N),         KC_S,XXXXXXX, \
+       XXXXXXX,         KC_O, LOPT_T(KC_A), LSFT_T(KC_E), LCMD_T(KC_I),         KC_Y,            KC_D, RCMD_T(KC_S), RSFT_T(KC_T), ROPT_T(KC_N),         KC_R,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-       XXXXXXX,      KC_SCLN,         KC_Q,         KC_J,         KC_K,         KC_X,            KC_B,         KC_M,         KC_W,         KC_V,         KC_Z,XXXXXXX, \
+       XXXXXXX,         KC_Q,         KC_X,         KC_Z,       KC_DOT,      KC_QUOT,         KC_SCLN,         KC_W,         KC_V,         KC_K,         KC_J,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-											     XXXXXXX,    NAV_HOLD, LCTL_T(KC_SPC), RCTL_T(KC_ENT),     SYM_HOLD,      XXXXXXX \
+											     XXXXXXX,     NAV_HOLD,LCTL_T(KC_SPC), RCTL_T(KC_ENT),     SYM_HOLD,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
@@ -168,7 +168,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 		case BASE:
 			if (record->event.pressed) {
-				default_layer_xor((DVO + 1) | (QWE + 1));
+				default_layer_xor((GFU + 1) | (QWE + 1));
 				register_mods(MOD_MASK_CSAG);
 				register_code(KC_SPC);
 				clear_keyboard();
