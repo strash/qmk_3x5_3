@@ -10,7 +10,7 @@
 #define LANG HYPR(KC_SPC)
 
 enum layout {
-	GFU = 0,
+	FYOU = 0,
 	QWE,
 	NAV,
 	SYM,
@@ -56,19 +56,19 @@ tap_dance_action_t tap_dance_actions[] = {
 // combo
 
 enum combos {
-	DVO_CAPS_WORD,
+	FYOU_CAPS_WORD,
 	QWE_CAPS_WORD,
 	MEDIA_TOG_WITH_MOD,
 	MEDIA_TOG,
 };
 
-const uint16_t PROGMEM dvo_caps_word_combo[] = {LSFT_T(KC_E), RSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM fyou_caps_word_combo[] = {LSFT_T(KC_E), RSFT_T(KC_T), COMBO_END};
 const uint16_t PROGMEM qwe_caps_word_combo[] = {LSFT_T(KC_D), RSFT_T(KC_K), COMBO_END};
 const uint16_t PROGMEM media_w_mod_combo[] = {LCTL_T(KC_SPC), RCTL_T(KC_ENT), COMBO_END};
 const uint16_t PROGMEM media_combo[] = {KC_SPC, KC_ENT, COMBO_END};
 
 combo_t key_combos[] = {
-	[DVO_CAPS_WORD] = COMBO(dvo_caps_word_combo, CW_TOGG),
+	[FYOU_CAPS_WORD] = COMBO(fyou_caps_word_combo, CW_TOGG),
 	[QWE_CAPS_WORD] = COMBO(qwe_caps_word_combo, CW_TOGG),
 	[MEDIA_TOG_WITH_MOD] = COMBO(media_w_mod_combo, TG(MEDIA)),
 	[MEDIA_TOG] = COMBO(media_combo, TG(MEDIA)),
@@ -76,21 +76,23 @@ combo_t key_combos[] = {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-	[GFU] = LAYOUT( \
+	[FYOU] = LAYOUT( \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-       XXXXXXX,         KC_G,         KC_F,         KC_U,         KC_X,         KC_Q,            KC_B,         KC_C,         KC_M,         KC_P,         KC_L,XXXXXXX, \
+       XXXXXXX,         KC_F,         KC_Y,         KC_O,         KC_U,      KC_SCLN,            KC_B,         KC_C,         KC_M,         KC_P,         KC_L,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-       XXXXXXX,         KC_O, LOPT_T(KC_A), LSFT_T(KC_E), LCMD_T(KC_I),         KC_Y,            KC_D, RCMD_T(KC_S), RSFT_T(KC_T), ROPT_T(KC_N),         KC_R,XXXXXXX, \
+       XXXXXXX,         KC_H, LOPT_T(KC_I), LSFT_T(KC_E), LCMD_T(KC_A),         KC_X,            KC_D, RCMD_T(KC_S), RSFT_T(KC_T), ROPT_T(KC_N),         KC_R,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-       XXXXXXX,      KC_COMM,       KC_DOT,         KC_J,         KC_K,      KC_QUOT,         KC_SCLN,         KC_W,         KC_V,         KC_H,         KC_Z,XXXXXXX, \
+       XXXXXXX,      KC_COMM,       KC_DOT,         KC_J,         KC_K,      KC_QUOT,            KC_G,         KC_W,         KC_V,         KC_Q,         KC_Z,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 											     XXXXXXX,     NAV_HOLD,LCTL_T(KC_SPC), RCTL_T(KC_ENT),     SYM_HOLD,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
-	// йцуке нгшщз(э)
+	//           э
+	// йцуке нгшщз
 	// фывап ролдж
 	// ячсми тьбю/
+	//        хъ ё
 
 	[QWE] = LAYOUT( \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
@@ -122,9 +124,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
 	   XXXXXXX,        KC_P1,        KC_P2,        KC_P3,        KC_P4,        KC_P5,           KC_P6,        KC_P7,        KC_P8,        KC_P9,        KC_P0,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-	   XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS,       KC_EQL, TD(TILD_GRV),         KC_SLSH,      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,XXXXXXX, \
+	   XXXXXXX,      KC_LCBR,      KC_RCBR,      KC_MINS,      KC_PLUS, TD(TILD_GRV),         KC_SLSH,      KC_LBRC,      KC_RBRC,      KC_LPRN,      KC_RPRN,XXXXXXX, \
 	//|-------+-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------+-------|
-												 XXXXXXX,      KC_UNDS,      KC_PLUS,         XXXXXXX,      XXXXXXX,      XXXXXXX \
+												 XXXXXXX,      KC_UNDS,       KC_EQL,         XXXXXXX,      XXXXXXX,      XXXXXXX \
 										//|-------------+-------------+-------------|  |-------------+-------------+-------------|
 	),
 
@@ -145,7 +147,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 		case BASE:
 			if (record->event.pressed) {
-				default_layer_xor((GFU + 1) | (QWE + 1));
+				default_layer_xor((FYOU + 1) | (QWE + 1));
 				register_mods(MOD_MASK_CSAG);
 				register_code(KC_SPC);
 				clear_keyboard();

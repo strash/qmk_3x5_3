@@ -1,4 +1,4 @@
 # QMK 3x5+3
 
 ## Based on `crkbd` keyboard.
-![5x3+3](https://github.com/user-attachments/assets/906d28cb-6b3e-45df-b1c6-daa25470a55c)
+![5x3+3](https://github.com/user-attachments/assets/d9f66be6-857c-4a7f-8439-40e0ec34cf4d)
