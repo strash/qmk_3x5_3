@@ -10,7 +10,7 @@
 #define LANG HYPR(KC_SPC)
 
 enum layout {
-	FYOU = 0,
+	XYOU = 0,
 	QWE,
 	NAV,
 	SYM,
@@ -56,19 +56,19 @@ tap_dance_action_t tap_dance_actions[] = {
 // combo
 
 enum combo_event {
-	FYOU_CAPS_WORD,
+	XYOU_CAPS_WORD,
 	QWE_CAPS_WORD,
 	MEDIA_TOG_WITH_MOD,
 	MEDIA_TOG,
 };
 
-const uint16_t PROGMEM fyou_caps_word_combo[] = {LSFT_T(KC_E), RSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM xyou_caps_word_combo[] = {LSFT_T(KC_E), RSFT_T(KC_T), COMBO_END};
 const uint16_t PROGMEM qwe_caps_word_combo[] = {LSFT_T(KC_D), RSFT_T(KC_K), COMBO_END};
 const uint16_t PROGMEM media_w_mod_combo[] = {LCTL_T(KC_SPC), RCTL_T(KC_ENT), COMBO_END};
 const uint16_t PROGMEM media_combo[] = {KC_SPC, KC_ENT, COMBO_END};
 
 combo_t key_combos[] = {
-	[FYOU_CAPS_WORD] = COMBO(fyou_caps_word_combo, CW_TOGG),
+	[XYOU_CAPS_WORD] = COMBO(xyou_caps_word_combo, CW_TOGG),
 	[QWE_CAPS_WORD] = COMBO(qwe_caps_word_combo, CW_TOGG),
 	[MEDIA_TOG_WITH_MOD] = COMBO(media_w_mod_combo, TG(MEDIA)),
 	[MEDIA_TOG] = COMBO(media_combo, TG(MEDIA)),
@@ -76,13 +76,13 @@ combo_t key_combos[] = {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = { \
 
-    [FYOU] = LAYOUT( \
+    [XYOU] = LAYOUT( \
     //|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-			    KC_F,         KC_Y,         KC_O,         KC_U,      KC_SCLN,            KC_G,         KC_C,         KC_M,         KC_P,         KC_L, \
+			    KC_X,         KC_Y,         KC_O,         KC_U,      KC_QUOT,            KC_G,         KC_C,         KC_L,         KC_P,         KC_M, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-				KC_H, LOPT_T(KC_I), LSFT_T(KC_E), LCMD_T(KC_A),         KC_X,            KC_D, RCMD_T(KC_S), RSFT_T(KC_T), ROPT_T(KC_N),         KC_R, \
+				KC_H, LOPT_T(KC_I), LSFT_T(KC_E), LCMD_T(KC_A),       KC_DOT,            KC_D, RCMD_T(KC_S), RSFT_T(KC_T), ROPT_T(KC_N),         KC_R, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
-		     KC_COMM,       KC_DOT,         KC_J,         KC_K,      KC_QUOT,            KC_B,         KC_W,         KC_V,         KC_Q,         KC_Z, \
+		     KC_SCLN,         KC_Z,         KC_J,         KC_K,      KC_COMM,            KC_B,         KC_W,         KC_F,         KC_V,         KC_Q, \
 	//|-------------+-------------+-------------+-------------+-------------|  |-------------+-------------+-------------+-------------+-------------|
 										 XXXXXXX,     NAV_HOLD,LCTL_T(KC_SPC), RCTL_T(KC_ENT),     SYM_HOLD,      XXXXXXX \
 								//|-------------+-------------+-------------|  |-------------+-------------+-------------|
@@ -147,7 +147,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 		case BASE:
 			if (record->event.pressed) {
-				default_layer_xor((FYOU + 1) | (QWE + 1));
+				default_layer_xor((XYOU + 1) | (QWE + 1));
 				register_mods(MOD_MASK_CSAG);
 				register_code(KC_SPC);
 				clear_keyboard();
